@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="assets/js/libs/raphael-min.js"></script>
+        <script type="text/javascript" src="assets/js/libs/jquery-1.6.1.min.js"></script>
+        <script type="text/javascript" src="assets/js/libs/canvg-1.0.js"></script>
+        <script type="text/javascript" src="assets/js/libs/rgbcolor.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/css/styles.css">
+        <title>Diagramme de Syntaxe</title>
+    </head>
+    <body>
+        <h1 class="title-project">GÉNÉRATEUR DE PHRASES</h1>
+        <main class="main bd-grid">
+            <article class="card">
+                <div class="card__precis">
+                    <textarea id="code" rows="17" cols="116"></textarea>
+                    <div>
+                        <table border="1">
+                            <thead>
+                                <tr>
+                                    <th>type</th>
+                                    <th>exemple</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Axiome</td> <td>S :=</td>
+                                </tr>
+                                <tr>
+                                    <td>Boucle</td> <td>a*</td>
+                                </tr>
+                                <tr>
+                                    <td>Boucle alternative</td> <td>a* < b > </td>
+                                </tr>
+                                <tr>
+                                    <td>OU</td> <td>a | b</td>
+                                </tr>
+                                <tr>
+                                    <td>ET</td> <td>a b</td>
+                                </tr>
+                                <tr>
+                                    <td>Parenthèse (</td> <td>\(</td>
+                                </tr>
+                                <tr>
+                                    <td>Parenthèse )</td> <td>\)</td>
+                                </tr>
+                                <tr>
+                                    <td>Délimiteur</td> <td>( )</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card__name">
+                    <p>C GRAMMAIRE</p>
+                </div>
+            </article>
+
+            <div>
+                <input type="button" class="button" value="Dessiner le diagramme" id="create" />
+            </div>
+            <article class="card">
+                <div class="card__precis">
+                    <div id="diagram"></div>
+                </div>
+                <div class="card__name">
+                    <p>GRAPHE</p>
+                </div>
+            </article>
+
+            <div>
+                <div>
+                    <label for="nbrePhrase">Renseignez le nombre de phrases que vous souhaitez générer (1 - 100)</label>
+                    <input type="number" min="1" max="100" placeholder="" value="1" id="nbrePhrase" />
+                </div>
+                <input type="button" class="button" value="Parcourir le diagramme" id="parcours" />
+                <input type="button" class="button" value="Annuler" id="reloadPage"  />
+            </div>
+
+            <article class="card">
+                <div class="card__name">
+                    <p>PHRASES</p>
+                </div>
+
+                <div class="card__precis">
+                    <ol id="phrasesList">
+                    </ol>
+                </div>
+            </article>
+        </main>
+        <h4 class="title-project"> Professeur
+            <ul>
+                <li>Prof : M. KONAN KAN</li>
+            </ul>
+        </h4>
+        <h4 class="title-project">Etudiants
+            <ul>
+                <li>BINI Aladji Kassoum | KONAN Kouadio Aimé Junior Stéphane | MEDA Kechiedou Luis-Borges Degrize </li>
+            </ul>
+        </h4>
+        <h5 class="title-project">Niveau
+            <ul>
+                <li>Elève Ingénieurs en Informatique 2e année INP-HB 2022-2023 </li>
+            </ul>
+        </h5>
+    </body>
+
+    <script src="assets/js/syntax-diagram.js"></script>
+    <script type="text/javascript" src="assets/js/libs/coffee-script.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            let myParser = null;
+            let phrasesList = document.getElementById('phrasesList');
+
+            function clearAllContentOfOl() {
+                // Supprime tous les éléments <li> de l'élément <ol>
+                while (phrasesList.firstChild) {
+                    phrasesList.removeChild(phrasesList.firstChild);
+                }
+            }
+            function drawDiagrame() {
+                // Supprime tous les éléments <li> de l'élément <ol>
+                clearAllContentOfOl();
+                while (phrasesList.firstChild) {
+                    phrasesList.removeChild(phrasesList.firstChild);
+                }
+                try {
+                    myParser = SyntaxDiagram("diagram", $("#code").val());
+                } catch (error) {
+                    alert(error);
+                }
+            }
+
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            async function paroursAndWriteValue() {
+                // Supprime tous les éléments <li> de l'élément <ol>
+                clearAllContentOfOl();
+                let nbrePhrases = $("#nbrePhrase")[0].value;
+                // On debut la generation des phrases
+                for (let i =0; i < nbrePhrases; i ++) {
+                    // Ajouter le premier élément
+                    let newListItem1 = document.createElement('li');
+                    newListItem1.id = "current_phraseGen"
+                    phrasesList.appendChild(newListItem1);
+                    await sleep(generateSentences(myParser[0])); // Il attend a ce que l'autre
+                    // finisse avant de generer une nouvelle phrase
+                }
+            }
+
+            function arreter() {
+                location.reload();
+            }
+
+            $("#create").click(drawDiagrame);
+            $("#parcours").click(paroursAndWriteValue);
+            $("#reloadPage").click(arreter);
+            $('#code').keydown(function (e) {
+                if (e.ctrlKey && e.keyCode == 13) drawDiagrame();
+            });
+        });
+
+    </script>
+</html>
