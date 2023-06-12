@@ -22,7 +22,7 @@ Inspiré par [http://www.json.org/](http://www.json.org/).
 ![](assets/img/resultat.png)
 
     - Apres avoir renseigné le graphe
-    - Rensignez le nombre de graphes que vous souhaitez genérer
+    - Renseignez le nombre de phrases que vous souhaitez générer
     - Appuyer sur le bouton Parcourir le graphe
     - Visualisez le resultat👌
 
@@ -30,10 +30,10 @@ Inspiré par [http://www.json.org/](http://www.json.org/).
 Open source
 
 ## Professeur : 
-    M. KONAN KAN
+    M. KONANKAN
 
 ## Etudiants
     - BINI Aladji Kassoum
     - KONAN Kouadio Aimé Junior Stéphane
-    - MEDA Kechiedou Luis-Borges Degrize
+    - MEDA Kechiedou Luis-Borges Dégrize
 
