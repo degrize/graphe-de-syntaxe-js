@@ -26,6 +26,9 @@ Inspiré par [http://www.json.org/](http://www.json.org/).
     - Appuyer sur le bouton Parcourir le graphe
     - Visualisez le resultat👌
 
+### Recap
+![](assets/img/resultat2.png)
+
 ## Licence
 Open source
 
