@@ -7,6 +7,7 @@
   let Axiome;
   let time_parcous = 1; // le temps que met le curseur sur les graphes
   let global_parser;
+  axiomeLu = false;
 
   var analyse, connect, count_char, draw, draw_box, html_enity, 
   is_arr, is_obj, is_str, merge_arr, next_word, parse, paths, reduce, remove_html_enity, traverse_draw;
@@ -551,8 +552,8 @@
                   const boucleAlter = [null, json.args];
                   const choixBoucleAlter = boucleAlter[Math.floor(Math.random()*boucleAlter.length)];
                   if (choixBoucleAlter != null) { // si le système n'a pas choisi la fin alors
-                    writeValue(choixBoucleAlter); // on parcourt l'element qui est bouclé
-                    writeValue(json); // on refait le tour
+                    writeValue(choixBoucleAlter); // on parcours l'element qui est bouclé
+                    writeValue(json); // on refaire le tour
                   }
                 }
               }
@@ -563,21 +564,21 @@
                 json.data.forEach(elt => {
                   branchesAlternatif.push(elt); // on ajoute les branches correpondands
                 });
-                // on choisit une branche aleatoire parmi les branches
+                // on choisi une branche aleatoire parmi les branches
                 let choixBranche = branchesAlternatif[Math.floor(Math.random()*branchesAlternatif.length)];
                 writeValue(choixBranche);
               }
 
               if (json.type === "repeat") { // si ce element alternatif a une boucle alors
-                writeValue(json.data); // on parcourt lelement alternatif
+                writeValue(json.data); // on parcours lelement alternatif
                 if (json.args){
-                  // Puisque c'est une boucle il peut ne pas afficher l'element bouclé
-                  // Donc on ajoute un element null a l'éleme,t boucle et on affiche soit le null, soit le bouclé
+                  // Puis que c'est une boucle il peut ne pas afficher l'element bouclé
+                  // Donc on ajoute un element null a l'éleme,t bpuclé et on affiche soit le null, soit le bouclé
                   const boucleAlter = [null, json.args];
                   const choixBoucleAlter = boucleAlter[Math.floor(Math.random()*boucleAlter.length)]; // on choisi l'un des 2
                   if (choixBoucleAlter != null) { // si le système n'a pas choisi la fin alors
-                    writeValue(choixBoucleAlter); // on parcourt l'element qui est bouclé
-                    writeValue(json); // on refait le tour
+                    writeValue(choixBoucleAlter); // on parcours l'element qui est bouclé
+                    writeValue(json); // on refaire le tour
                   }
                 }
               }
@@ -589,40 +590,57 @@
           break;
         case "string": // On a un element Terminal => On l'affiche
 
-        function maFonctionAsynchrone() {
-          return new Promise((resolve, reject) => {
-            // Effectuer une opération asynchrone
-            setTimeout(function () {
-              if (json.match(/^((\".*\")|(\'.*\'))$/) != null) {
-                json = json.substring(1, json.length - 1);
-              }
-              let text_choose = document.getElementById("rect_" + json);
+          let text_choose = document.getElementById("rect_" + json);
+          function revenirAuDepart() {
 
+            return new Promise(resolve => {
               if (json === Axiome) {
-                text_choose.animate({fill:'blue'},200)
-                function maFonctionAsynchrone2() {
-                  return new Promise((resolve, reject) => {
-                    resolve(time_parcous = generateSentences(global_parser[0]));
-                  })
-                }
-                maFonctionAsynchrone2().then(resolve => {
-
-                })
-              } else {
-                if (text_choose != null) {
-                  let current_phraseGen = document.getElementById('current_phraseGen');
-                  current_phraseGen.textContent += " " + json;
-                  text_choose.animate({fill:'yellow'},800)
-                }
+                generateSentences(global_parser[0]);
+                resolve(false);
+                // Il attend à ce que l'autre
+                // finisse avant de generer une nouvelle phrase
               }
-            }, time_parcous);
+              resolve(true);
+            })
+          }
+
+          revenirAuDepart().then(r => {
+
+              function maFonctionAsynchrone() {
+                return new Promise((resolve, reject) => {
+                  // Effectuer une opération asynchrone
+
+                    setTimeout(function () {
+                      if (json.match(/^((\".*\")|(\'.*\'))$/) != null) {
+                        json = json.substring(1, json.length - 1);
+                      }
+                      let text_choose = document.getElementById("rect_" + json);
+
+                      if (Axiome === json) {
+                        text_choose.animate({fill:'blue'},200)
+                        function maFonctionAsynchrone2() {
+                          return new Promise((resolve, reject) => {
+                            resolve(time_parcous = generateSentences(global_parser[0]));
+                          })
+                        }
+                      } else {
+                        if (text_choose != null) {
+                          let current_phraseGen = document.getElementById('current_phraseGen');
+                          current_phraseGen.textContent += " " + json;
+                          text_choose.animate({fill:'yellow'},800)
+                          resolve(time_parcous)
+                        }
+                      }
+                    }, time_parcous);
+
+                });
+              }
+              maFonctionAsynchrone()
+                  .then(result => {
+                    console.log("Résultat :", result);
+                  })
+            time_parcous += 1000;
           });
-        }
-          maFonctionAsynchrone()
-              .then(result => {
-                console.log("Résultat :", result);
-              })
-          time_parcous += 1000;
 
           break;
         default : break;

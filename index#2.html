@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <script type="text/javascript" src="assets/js/libs/raphael-min.js"></script>
@@ -76,14 +76,17 @@
                     <input type="number" min="1" max="100" placeholder="" value="1" id="nbrePhrase" />
                 </div>
                 <input type="button" class="button" value="Parcourir le diagramme" id="parcours" />
+                <input type="button" class="button" value="Annuler" id="reloadPage"  />
             </div>
 
             <article class="card">
                 <div class="card__name">
                     <p>PHRASES</p>
                 </div>
+
                 <div class="card__precis">
-                    <ol id="phrasesList"></ol>
+                    <ol id="phrasesList">
+                    </ol>
                 </div>
             </article>
         </main>
@@ -146,13 +149,17 @@
                     newListItem1.id = "current_phraseGen"
                     phrasesList.appendChild(newListItem1);
                     await sleep(generateSentences(myParser[0])); // Il attend a ce que l'autre
-                    newListItem1.id = "";
                     // finisse avant de generer une nouvelle phrase
                 }
             }
 
+            function arreter() {
+                location.reload();
+            }
+
             $("#create").click(drawDiagrame);
             $("#parcours").click(paroursAndWriteValue);
+            $("#reloadPage").click(arreter);
             $('#code').keydown(function (e) {
                 if (e.ctrlKey && e.keyCode == 13) drawDiagrame();
             });

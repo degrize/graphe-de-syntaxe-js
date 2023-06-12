@@ -14,7 +14,7 @@ Inspiré par [http://www.json.org/](http://www.json.org/).
         non-term
 ![](assets/img/exemple.png)
 
-    Numero := ["+"|"-"] ("0"|(1-9 0-9*)) ["." (0-9)*] [("e"|"E")))
+    Numero := ["+"|"-"] ("0"|(1-9 0-8*)) ["." (0-9)*] [("e"|"E")))
 ![](assets/img/numbers.png)
 
 ## Usage
