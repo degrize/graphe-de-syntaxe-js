@@ -76,6 +76,8 @@
                     <input type="number" min="1" max="100" placeholder="" value="1" id="nbrePhrase" />
                 </div>
                 <input type="button" class="button" value="Parcourir le diagramme" id="parcours" />
+                <input type="button" class="button" value="Annuler" id="reloadPage"  />
+
             </div>
 
             <article class="card">
@@ -139,7 +141,7 @@
                 // Supprime tous les éléments <li> de l'élément <ol>
                 clearAllContentOfOl();
                 let nbrePhrases = $("#nbrePhrase")[0].value;
-                // On debut la generation des phrases
+                // On commence la generation des phrases
                 for (let i =0; i < nbrePhrases; i ++) {
                     // Ajouter le premier élément
                     let newListItem1 = document.createElement('li');
@@ -150,6 +152,11 @@
                     // finisse avant de generer une nouvelle phrase
                 }
             }
+
+            function arreter() {
+                location.reload();
+            }
+            $("#reloadPage").click(arreter);
 
             $("#create").click(drawDiagrame);
             $("#parcours").click(paroursAndWriteValue);
